@@ -1,4 +1,12 @@
+'use client';
+import Link from 'next/link';
+import { signIn, signOut, useSession } from 'next-auth/react';
+
 const Navigation = () => {
+    const { data: session } = useSession();
+
+    // if (session) console.log(session);
+
     return (
         <div className='parent flex justify-between items-center w-full px-8 mt-8'>
             <div className='left'>
@@ -7,9 +15,29 @@ const Navigation = () => {
                 </div>
                 <div className='sandwich'></div>
             </div>
-            <div className='right flex flex-row'>
-                <button className='cta-btn mr-4'>+ New Playlist</button>
-                <div className='h-8 w-8 rounded-full bg-black'></div>
+            <div className='right'>
+                {session ? (
+                    <div className='flex flex-row'>
+                        <button className='cta-btn mr-6'>+ New Playlist</button>
+                        <button
+                            className='cta-btn mr-6'
+                            onClick={() => signOut()}
+                        >
+                            Sign Out
+                        </button>
+                        <button className='h-10 w-10'>
+                            <img
+                                className='rounded-full'
+                                src={session?.user?.image}
+                                alt='Profile Picture'
+                            />
+                        </button>
+                    </div>
+                ) : (
+                    <button className='cta-btn mr-4' onClick={() => signIn()}>
+                        Sign In
+                    </button>
+                )}
             </div>
         </div>
     );
