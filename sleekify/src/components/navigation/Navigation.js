@@ -5,8 +5,6 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 const Navigation = () => {
     const { data: session } = useSession();
 
-    // if (session) console.log(session);
-
     return (
         <div className='parent flex justify-between items-center w-full px-8 mt-8'>
             <div className='left'>
@@ -28,7 +26,7 @@ const Navigation = () => {
                         <button className='h-10 w-10'>
                             <img
                                 className='rounded-full'
-                                src={session?.user?.image}
+                                src={session?.user?.picture}
                                 alt='Profile Picture'
                             />
                         </button>

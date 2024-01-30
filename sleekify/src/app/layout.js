@@ -17,7 +17,7 @@ export default async function RootLayout({ children }) {
     return (
         <html lang='en'>
             <body className=''>
-                <SessionProvider session={session}>
+                <SessionProvider session={session} refetchInterval={60 * 60}>
                     <Navigation />
                     {children}
                 </SessionProvider>
