@@ -1,15 +1,22 @@
 'use client';
 import Link from 'next/link';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const Navigation = () => {
     const { data: session } = useSession();
+    const router = useRouter();
 
     return (
         <div className='parent flex justify-between items-center w-full px-8 mt-8'>
             <div className='left'>
                 <div className='logo'>
-                    <h1 className='font-bold text-4xl'>Sleekify</h1>
+                    <h1
+                        className='font-bold text-4xl hover:cursor-pointer'
+                        onClick={() => router.push('/')}
+                    >
+                        Sleekify
+                    </h1>
                 </div>
                 <div className='sandwich'></div>
             </div>
