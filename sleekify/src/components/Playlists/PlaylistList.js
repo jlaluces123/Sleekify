@@ -2,6 +2,7 @@
 import { useSession, getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 async function getMyPlaylists(accessToken) {
     const playlists = await fetch('https://api.spotify.com/v1/me/playlists', {
@@ -13,14 +14,15 @@ async function getMyPlaylists(accessToken) {
     return playlists.items;
 }
 
-const PlaylistBuilder = () => {
+const PlaylistList = () => {
     const { data: session, status } = useSession();
     const [myPlaylists, setMyPlaylists] = useState(null);
+    const router = useRouter();
 
     useEffect(() => {
         if (!!session.user.accessToken) {
             getMyPlaylists(session.user.accessToken).then((playlists) => {
-                console.log('[PlaylistBuilder] playlists --> ', playlists);
+                console.log('[PlaylistList] playlists --> ', playlists);
                 setMyPlaylists(playlists);
             });
         }
@@ -34,9 +36,16 @@ const PlaylistBuilder = () => {
                     {myPlaylists.map((playlist) => {
                         return (
                             <div className='d-flex flex-row' key={playlist.id}>
-                                <h1 className='hover:underline hover:cursor-pointer'>
+                                <a
+                                    className='hover:underline hover:cursor-pointer'
+                                    onClick={() =>
+                                        router.push(
+                                            `/playlist-builder/${playlist.id}`
+                                        )
+                                    }
+                                >
                                     {playlist.name}
-                                </h1>
+                                </a>
                             </div>
                         );
                     })}
@@ -48,4 +57,4 @@ const PlaylistBuilder = () => {
     );
 };
 
-export default PlaylistBuilder;
+export default PlaylistList;
