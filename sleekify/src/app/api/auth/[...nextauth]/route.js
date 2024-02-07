@@ -28,7 +28,7 @@ const authOptions = NextAuth({
             clientSecret: process.env.SPOTIFY_SECRET,
             authorization: {
                 params: {
-                    scope: 'user-read-email user-read-private user-read-currently-playing user-read-playback-position user-top-read user-read-recently-played playlist-read-private',
+                    scope: 'user-read-email user-read-private user-read-currently-playing user-read-playback-position user-top-read user-read-recently-played playlist-read-private playlist-modify-public playlist-modify-private',
                 },
             },
         }),

@@ -8,7 +8,7 @@ const Navigation = () => {
     const router = useRouter();
 
     return (
-        <div className='parent flex justify-between items-center w-full px-8 mt-8'>
+        <div className='navigation flex justify-between items-center w-full px-8 max-sm:px-4 mt-8 max-sm:mt-4'>
             <div className='left'>
                 <div className='logo'>
                     <h1
@@ -23,7 +23,6 @@ const Navigation = () => {
             <div className='right'>
                 {session ? (
                     <div className='flex flex-row'>
-                        <button className='cta-btn mr-6'>+ New Playlist</button>
                         <button
                             className='cta-btn mr-6'
                             onClick={() => signOut()}
