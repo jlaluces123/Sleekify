@@ -3,6 +3,7 @@ import './globals.css';
 import Navigation from '@/components/navigation/Navigation';
 import SessionProvider from '@/components/Provider/SessionProvider';
 import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,6 +31,6 @@ export default async function RootLayout({ children }) {
             </html>
         );
     } else {
-        return <p>Access Denied</p>;
+        redirect('/api/auth/signin');
     }
 }
