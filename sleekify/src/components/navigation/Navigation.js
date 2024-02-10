@@ -1,11 +1,23 @@
 'use client';
 import Link from 'next/link';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession, getSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const Navigation = () => {
     const { data: session } = useSession();
     const router = useRouter();
+
+    useEffect(() => {
+        if (!session.expires) {
+            console.log('[Navigation] no session.expires --> ', session);
+            getSession().then((session) => {
+                console.log('[Navigation] getSession() res --> ', session);
+            });
+        } else {
+            console.log('[Navigation] session.expires --> ', session);
+        }
+    }, [session]);
 
     return (
         <div className='navigation flex justify-between items-center w-full px-8 max-sm:px-4 mt-8 max-sm:mt-4'>

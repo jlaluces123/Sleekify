@@ -1,5 +1,5 @@
 'use client';
-import { useSession } from 'next-auth/react';
+import { useSession, getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useParams, redirect } from 'next/navigation';
 
@@ -37,7 +37,26 @@ const PlaylistBuilder = () => {
     const [searchedSongs, setSearchedSongs] = useState(null);
 
     useEffect(() => {
-        if (!!session.user.accessToken) {
+        if (!session.expires) {
+            console.log('[PlaylistBuilder] no session.expires --> ', session);
+            getSession().then((session) => {
+                console.log('[PlaylistBuilder] getSession() res --> ', session);
+                if (!!session.user.accessToken) {
+                    console.log(
+                        '[PlaylistBuilder] accessToken --> ',
+                        session.user.accessToken
+                    );
+                    console.log('[PlaylistBuilder] params --> ', params);
+                    getPlaylistItems(
+                        session.user.accessToken,
+                        params.playlist_id
+                    ).then((songs) => {
+                        console.log('[PlaylistBuilder] songs --> ', songs);
+                        setPlaylistSongs(songs);
+                    });
+                }
+            });
+        } else if (!!session.user.accessToken) {
             console.log(
                 '[PlaylistBuilder] accessToken --> ',
                 session.user.accessToken
@@ -50,7 +69,7 @@ const PlaylistBuilder = () => {
                 }
             );
         }
-    }, [status, session.user.accessToken]);
+    }, [session]);
 
     const handleSearch = (songName) => {
         console.log('[handleSearch] songName --> ', songName);

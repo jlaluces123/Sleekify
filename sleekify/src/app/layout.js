@@ -13,15 +13,23 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
     const session = await getServerSession();
+    console.log('[layout.js] session --> ', session);
 
-    return (
-        <html lang='en'>
-            <body className=''>
-                <SessionProvider session={session} refetchInterval={60 * 60}>
-                    <Navigation />
-                    {children}
-                </SessionProvider>
-            </body>
-        </html>
-    );
+    if (session) {
+        return (
+            <html lang='en'>
+                <body className=''>
+                    <SessionProvider
+                        session={session}
+                        refetchInterval={60 * 60}
+                    >
+                        <Navigation />
+                        {children}
+                    </SessionProvider>
+                </body>
+            </html>
+        );
+    } else {
+        return <p>Access Denied</p>;
+    }
 }
