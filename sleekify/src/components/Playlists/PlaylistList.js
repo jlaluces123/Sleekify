@@ -19,14 +19,36 @@ const PlaylistList = () => {
     const [myPlaylists, setMyPlaylists] = useState(null);
     const router = useRouter();
 
+    // useEffect(() => {
+
+    // }, [session, session.user.accessToken]);
+
     useEffect(() => {
-        if (!!session.user.accessToken) {
+        if (!session.expires) {
+            console.log('no session.expires --> ', session);
+            getSession().then((session) => {
+                console.log('getSession() res --> ', session);
+                if (!!session.user.accessToken) {
+                    console.log('session accesstoken found');
+                    getMyPlaylists(session.user.accessToken).then(
+                        (playlists) => {
+                            console.log(
+                                '[PlaylistList] playlists --> ',
+                                playlists
+                            );
+                            setMyPlaylists(playlists);
+                        }
+                    );
+                }
+            });
+        } else if (!!session.user.accessToken) {
+            console.log('session accesstoken found');
             getMyPlaylists(session.user.accessToken).then((playlists) => {
                 console.log('[PlaylistList] playlists --> ', playlists);
                 setMyPlaylists(playlists);
             });
         }
-    }, [session.user.accessToken]);
+    }, [session]);
 
     return (
         <div>
