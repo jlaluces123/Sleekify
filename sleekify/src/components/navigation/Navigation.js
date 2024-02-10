@@ -44,7 +44,7 @@ const Navigation = () => {
                         <button className='h-10 w-10'>
                             <img
                                 className='rounded-full'
-                                src={session?.user?.picture}
+                                src={session?.user?.picture || session?.picture}
                                 alt='Profile Picture'
                             />
                         </button>
