@@ -33,7 +33,7 @@ const Navigation = () => {
                 <div className='sandwich'></div>
             </div>
             <div className='right'>
-                {session ? (
+                {session && session.expires ? (
                     <div className='flex flex-row'>
                         <button
                             className='cta-btn mr-6'
