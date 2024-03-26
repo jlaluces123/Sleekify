@@ -17,7 +17,7 @@ const Navigation = () => {
         } else {
             console.log('[Navigation] session.expires --> ', session);
         }
-    }, [session]);
+    }, [session.expires]);
 
     return (
         <div className='navigation flex justify-between items-center w-full px-8 max-sm:px-4 mt-8 max-sm:mt-4'>
