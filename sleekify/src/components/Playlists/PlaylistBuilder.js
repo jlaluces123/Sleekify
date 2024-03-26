@@ -88,7 +88,10 @@ const PlaylistBuilder = () => {
             }
         )
             .then((res) => res.json())
-            .catch((err) => console.error('[searchSongs] err --> ', err));
+            .catch((err) => {
+                console.error('[searchSongs] err --> ', err, { songName, accessToken });
+                
+            }));
 
         console.log('[searchSongs] songs --> ', songs);
         setSearchedSongs(songs.tracks.items);

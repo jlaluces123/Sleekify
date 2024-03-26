@@ -18,6 +18,11 @@ async function refreshAccessToken(refreshToken) {
     });
 
     const newToken = await response.json();
+
+    console.log('refreshAccessToken --> ', newToken);
+
+    localStorage.setItem('access_token', newToken.accessToken);
+    localStorage.setItem('refresh_token', response.refreshToken);
 }
 
 const authOptions = NextAuth({
@@ -43,6 +48,7 @@ const authOptions = NextAuth({
                 token.expires_at = account.expires_at;
                 token.accessToken = account.access_token;
                 token.refreshToken = account.refresh_token;
+                return token;
             }
 
             if (Date.now() < token.expires_at * 1000) {

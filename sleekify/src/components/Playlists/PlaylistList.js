@@ -25,7 +25,7 @@ const PlaylistList = () => {
 
     useEffect(() => {
         if (!session.expires) {
-            console.log('no session.expires --> ', session);
+            console.log('[PlaylistList] no session.expires --> ', session);
             getSession().then((session) => {
                 console.log('getSession() res --> ', session);
                 if (!!session.user.accessToken) {
@@ -38,15 +38,15 @@ const PlaylistList = () => {
                             );
                             setMyPlaylists(playlists);
                         }
-                    );
+                    ).catch(err => console.error('[PlaylistList] getMyPlaylists err --> ', err));
                 }
             });
         } else if (!!session.user.accessToken) {
-            console.log('session accesstoken found');
+            console.log('[PlaylistList] session accesstoken found');
             getMyPlaylists(session.user.accessToken).then((playlists) => {
                 console.log('[PlaylistList] playlists --> ', playlists);
                 setMyPlaylists(playlists);
-            });
+            }).catch(err => console.error('[PlaylistList] getMyPlaylists err --> ', err));
         }
     }, [session]);
 
