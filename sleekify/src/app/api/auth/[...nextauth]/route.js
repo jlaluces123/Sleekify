@@ -59,6 +59,7 @@ const authOptions = NextAuth({
         },
         async session({ session, token }) {
             session.user = token;
+            console.log('[callbacks] session --> ', session, token);
             return session;
         },
     },

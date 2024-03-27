@@ -37,38 +37,16 @@ const PlaylistBuilder = () => {
     const [searchedSongs, setSearchedSongs] = useState(null);
 
     useEffect(() => {
-        if (!session.expires) {
-            console.log('[PlaylistBuilder] no session.expires --> ', session);
-            getSession().then((session) => {
-                console.log('[PlaylistBuilder] getSession() res --> ', session);
-                if (!!session.user.accessToken) {
-                    console.log(
-                        '[PlaylistBuilder] accessToken --> ',
-                        session.user.accessToken
-                    );
-                    console.log('[PlaylistBuilder] params --> ', params);
-                    getPlaylistItems(
-                        session.user.accessToken,
-                        params.playlist_id
-                    ).then((songs) => {
-                        console.log('[PlaylistBuilder] songs --> ', songs);
-                        setPlaylistSongs(songs);
-                    });
-                }
+        console.log('[PlaylistBuilder] session --> ', session);
+        getPlaylistItems(session.user.accessToken, params.playlist_id)
+            .then((songs) => {
+                console.log('[getPlaylistItems] res --> ', songs);
+                return setPlaylistSongs(songs);
+            })
+            .catch((err) => {
+                console.log('[getPlaylistItems] ERR --> ', err);
+                return err;
             });
-        } else if (!!session.user.accessToken) {
-            console.log(
-                '[PlaylistBuilder] accessToken --> ',
-                session.user.accessToken
-            );
-            console.log('[PlaylistBuilder] params --> ', params);
-            getPlaylistItems(session.user.accessToken, params.playlist_id).then(
-                (songs) => {
-                    console.log('[PlaylistBuilder] songs --> ', songs);
-                    setPlaylistSongs(songs);
-                }
-            );
-        }
     }, [session]);
 
     const handleSearch = (songName) => {
@@ -170,36 +148,34 @@ const PlaylistBuilder = () => {
                 <div></div>
             ) : !!playlistSongs && playlistSongs.length ? (
                 <div>
-                    {!!playlistSongs &&
-                        playlistSongs.map((song) => {
-                            return (
-                                <div
-                                    className='flex flex-row justify-between my-4'
-                                    key={song.track.id}
-                                >
-                                    <div className='song-name cursor-pointer w-full my-2 hover:bg-gray-200'>
-                                        {song.track.name ||
-                                            song.track.album.name}{' '}
-                                        by{' '}
-                                        {song.track.artists.map((artist) => {
-                                            return artist.name + ', ';
-                                        })}
-                                    </div>
-                                    <div className='right-song'>
-                                        <button
-                                            onClick={() =>
-                                                deleteSongFromPlaylist(
-                                                    params.playlist_id,
-                                                    song
-                                                )
-                                            }
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
+                    {playlistSongs.map((song) => {
+                        return (
+                            <div
+                                className='flex flex-row justify-between my-4'
+                                key={song.track.id}
+                            >
+                                <div className='song-name cursor-pointer w-full my-2 hover:bg-gray-200'>
+                                    {song.track.name || song.track.album.name}{' '}
+                                    by{' '}
+                                    {song.track.artists.map((artist) => {
+                                        return artist.name + ', ';
+                                    })}
                                 </div>
-                            );
-                        })}
+                                <div className='right-song'>
+                                    <button
+                                        onClick={() =>
+                                            deleteSongFromPlaylist(
+                                                params.playlist_id,
+                                                song
+                                            )
+                                        }
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
             ) : (
                 <div>loading...</div>
