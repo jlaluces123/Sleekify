@@ -4,50 +4,42 @@ import { redirect } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-async function getMyPlaylists(accessToken) {
-    const playlists = await fetch('https://api.spotify.com/v1/me/playlists', {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    }).then((res) => res.json());
-
-    return playlists.items;
-}
-
 const PlaylistList = () => {
     const { data: session, status } = useSession();
     const [myPlaylists, setMyPlaylists] = useState(null);
     const router = useRouter();
 
-    // useEffect(() => {
+    const getMyPlaylists = async (accessToken) => {
+        const playlists = await fetch(
+            'https://api.spotify.com/v1/me/playlists?limit=50',
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+            .then((res) => res.json())
+            .then((filterPlaylists) => {
+                console.log(filterPlaylists);
+                return filterPlaylists.items.filter(
+                    (playlist) =>
+                        playlist.owner.display_name === session.user.name
+                );
+            });
 
-    // }, [session, session.user.accessToken]);
+        return playlists;
+    };
 
     useEffect(() => {
-        if (!session.expires) {
-            console.log('[PlaylistList] no session.expires --> ', session);
-            getSession().then((session) => {
-                console.log('getSession() res --> ', session);
-                if (!!session.user.accessToken) {
-                    console.log('session accesstoken found');
-                    getMyPlaylists(session.user.accessToken).then(
-                        (playlists) => {
-                            console.log(
-                                '[PlaylistList] playlists --> ',
-                                playlists
-                            );
-                            setMyPlaylists(playlists);
-                        }
-                    ).catch(err => console.error('[PlaylistList] getMyPlaylists err --> ', err));
-                }
+        getMyPlaylists(session.user.accessToken)
+            .then((playlists) => {
+                console.log('[getMyPlaylists] res --> ', playlists);
+                return setMyPlaylists(playlists);
+            })
+            .catch((err) => {
+                console.error('[getMyPlaylists] err --> ', err);
+                return err;
             });
-        } else if (!!session.user.accessToken) {
-            console.log('[PlaylistList] session accesstoken found');
-            getMyPlaylists(session.user.accessToken).then((playlists) => {
-                console.log('[PlaylistList] playlists --> ', playlists);
-                setMyPlaylists(playlists);
-            }).catch(err => console.error('[PlaylistList] getMyPlaylists err --> ', err));
-        }
     }, [session]);
 
     return (
