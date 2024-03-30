@@ -47,6 +47,14 @@ const PlaylistList = () => {
             <h1 className='mb-8'>Playlist Builder</h1>
             {!!myPlaylists && myPlaylists.length ? (
                 <div>
+                    <a
+                        className='hover:underline hover:cursor-pointer'
+                        onClick={() =>
+                            router.push(`/playlist-builder/liked-songs`)
+                        }
+                    >
+                        Liked Songs
+                    </a>
                     {myPlaylists.map((playlist) => {
                         return (
                             <div className='d-flex flex-row' key={playlist.id}>
