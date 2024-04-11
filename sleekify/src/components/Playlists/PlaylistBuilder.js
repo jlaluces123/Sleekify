@@ -56,6 +56,7 @@ const PlaylistBuilder = () => {
 
     const searchSongs = async (e, accessToken, songName) => {
         e.preventDefault();
+        if (!songName || songName === '') return;
         const parsedSongName = await parseSong(songName);
         const songs = await fetch(
             `https://api.spotify.com/v1/search?q=${parsedSongName}&type=track`,
@@ -178,7 +179,7 @@ const PlaylistBuilder = () => {
                     })}
                 </div>
             ) : (
-                <div>loading...</div>
+                <div>No songs added yet!</div>
             )}
             <h3 className='mt-6 mb-4 font-bold text-2xl'>Add New Songs</h3>
             {/* TODO: look into Layouts after */}
