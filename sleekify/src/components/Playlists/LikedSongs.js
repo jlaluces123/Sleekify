@@ -84,7 +84,7 @@ const LikedSongs = () => {
                             <th>#</th>
                             <th>Title</th>
                             <th>Artist</th>
-                            <th>Genre</th>
+                            {/* <th>Genre</th> */}
                             <th>Date Added</th>
                         </tr>
                     </thead>

@@ -3,6 +3,7 @@ import { useSession, getSession } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import CreatePlaylist from './CreatePlaylist';
 
 const PlaylistList = () => {
     const { data: session, status } = useSession();
@@ -45,6 +46,7 @@ const PlaylistList = () => {
     return (
         <div>
             <h1 className='mb-8'>Playlist Builder</h1>
+            <CreatePlaylist />
             {!!myPlaylists && myPlaylists.length ? (
                 <div>
                     <a
