@@ -15,9 +15,41 @@ const LikedSongs = () => {
                     Authorization: `Bearer ${accessToken}`,
                 },
             }
-        ).then((res) => res.json());
+        )
+            .then((res) => res.json())
+            .catch((err) => console.error('[getLikedSongs] err --> ', err));
 
         return songs;
+    };
+
+    const getSongGenre = async (artistId, accessToken) => {
+        const genre = await fetch(
+            `https://api.spotify.com/v1/artists/${artistId}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+            .then((res) => res.json())
+            .catch((err) => console.error('[getSongGenre] err --> ', err));
+
+        return genre;
+    };
+
+    const getGenreSeeds = async (accessToken) => {
+        const genreSeeds = await fetch(
+            'https://api.spotify.com/v1/recommendations/available-genre-seeds',
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+            .then((res) => res.json())
+            .catch((err) => console.error('[getGenreSeeds] err --> ', err));
+
+        return genreSeeds;
     };
 
     useEffect(() => {
@@ -31,18 +63,31 @@ const LikedSongs = () => {
                 console.error('[getLikedSongs] err --> ', err);
                 return err;
             });
+        getGenreSeeds(session.user.accessToken)
+            .then((res) => {
+                console.log('[getGenreSeeds] res --> ', res);
+                return res;
+            })
+            .catch((err) => {
+                console.error('[getGenreSeeds] err --> ', err);
+                return err;
+            });
     }, [session]);
 
     return (
         <div>
+            <div className='filters'></div>
             {!!likedSongs && likedSongs.items.length ? (
                 <table id='likedSongs'>
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Artist</th>
-                        <th>Date Added</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Artist</th>
+                            <th>Genre</th>
+                            <th>Date Added</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         {likedSongs.items.map((song, index) => {
                             return (
