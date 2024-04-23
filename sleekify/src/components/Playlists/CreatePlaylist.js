@@ -72,7 +72,7 @@ const CreatePlaylist = () => {
         <form onSubmit={handleSubmit}>
             <Dialog onOpenChange={handleDialogueChange} open={dialogueOpen}>
                 <DialogTrigger asChild>
-                    <button className='mb-8 bg-green-500 hover:cursor-pointer'>
+                    <button className='mb-8 p-4 w-full font-bold text-2xl bg-green-400 hover:cursor-pointer hover:bg-green-500'>
                         <h1>Create Playlist</h1>
                     </button>
                 </DialogTrigger>
@@ -80,9 +80,7 @@ const CreatePlaylist = () => {
                     <DialogHeader>Create a Playlist</DialogHeader>
                     <DialogDescription>
                         Ready to groove? Quickly craft your perfect playlist
-                        here! Just add a title, and if you’re feeling
-                        expressive, a catchy description. Let’s make music
-                        magic!
+                        here!
                     </DialogDescription>
                     <hr className='' />
                     <div className='dialog-body flex flex-col'>

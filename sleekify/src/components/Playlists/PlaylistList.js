@@ -5,6 +5,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import CreatePlaylist from './CreatePlaylist';
 
+import EllipsesMenu from '@/components/DropDown/DropDown';
+
 const PlaylistList = () => {
     const { data: session, status } = useSession();
     const [myPlaylists, setMyPlaylists] = useState(null);
@@ -44,24 +46,34 @@ const PlaylistList = () => {
     }, [session]);
 
     return (
-        <div>
-            <h1 className='mb-8'>Playlist Builder</h1>
+        <div className='w-full'>
+            <h1 className='text-4xl font-bold mb-8'>Playlist Builder</h1>
             <CreatePlaylist />
             {!!myPlaylists && myPlaylists.length ? (
-                <div>
-                    <a
-                        className='hover:underline hover:cursor-pointer'
-                        onClick={() =>
-                            router.push(`/playlist-builder/liked-songs`)
-                        }
-                    >
-                        Liked Songs
-                    </a>
-                    {myPlaylists.map((playlist) => {
+                <div className='max-w-full'>
+                    <div className='bg-gray-100 py-2'>
+                        <a
+                            className='text-2xl font-semibold hover:underline hover:cursor-pointer'
+                            onClick={() =>
+                                router.push(`/playlist-builder/liked-songs`)
+                            }
+                        >
+                            Liked Songs
+                        </a>
+                    </div>
+                    {myPlaylists.map((playlist, index) => {
                         return (
-                            <div className='d-flex flex-row' key={playlist.id}>
+                            <div
+                                className={
+                                    'flex justify-between items-center flex-row py-2' +
+                                    ((index + 1) % 2 === 0
+                                        ? ' bg-gray-100'
+                                        : '')
+                                }
+                                key={playlist.id}
+                            >
                                 <a
-                                    className='hover:underline hover:cursor-pointer'
+                                    className='hover:underline text-2xl font-semibold hover:cursor-pointer truncate overflow-ellipsis max-w-3/4'
                                     onClick={() =>
                                         router.push(
                                             `/playlist-builder/${playlist.id}`
@@ -70,6 +82,7 @@ const PlaylistList = () => {
                                 >
                                     {playlist.name}
                                 </a>
+                                <EllipsesMenu />
                             </div>
                         );
                     })}

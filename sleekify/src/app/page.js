@@ -11,10 +11,8 @@ export default function Home() {
     if (session) {
         console.log('[root page.js] session --> ', session);
         return (
-            <main className='flex min-h-screen flex-col items-center justify-center px-24 max-sm:px-4 pt-8'>
-                <div className='font-bold text-4xl'>
-                    <PlaylistList />
-                </div>
+            <main className='flex max-w-max min-w-full min-h-screen flex-col items-center justify-center px-24 max-sm:px-4 pt-8'>
+                <PlaylistList />
             </main>
         );
     }
