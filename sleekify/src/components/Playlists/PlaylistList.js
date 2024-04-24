@@ -30,14 +30,18 @@ const PlaylistList = () => {
                 );
             });
 
+        setMyPlaylists(playlists);
         return playlists;
     };
+
+    useEffect(() => {
+        console.log('[PlaylistList] myPlaylists updated');
+    }, [myPlaylists]);
 
     useEffect(() => {
         getMyPlaylists(session.user.accessToken)
             .then((playlists) => {
                 console.log('[getMyPlaylists] res --> ', playlists);
-                return setMyPlaylists(playlists);
             })
             .catch((err) => {
                 console.error('[getMyPlaylists] err --> ', err);
@@ -48,7 +52,7 @@ const PlaylistList = () => {
     return (
         <div className='w-full'>
             <h1 className='text-4xl font-bold mb-8'>Playlist Builder</h1>
-            <CreatePlaylist />
+            <CreatePlaylist refetch={getMyPlaylists} />
             {!!myPlaylists && myPlaylists.length ? (
                 <div className='max-w-full'>
                     <div className='bg-gray-100 py-2'>
@@ -82,7 +86,10 @@ const PlaylistList = () => {
                                 >
                                     {playlist.name}
                                 </a>
-                                <EllipsesMenu />
+                                <EllipsesMenu
+                                    playlistId={playlist.id}
+                                    refetch={getMyPlaylists}
+                                />
                             </div>
                         );
                     })}

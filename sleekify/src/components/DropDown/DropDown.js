@@ -1,5 +1,7 @@
 'use client';
 import { BreadcrumbEllipsis } from '../ui/breadcrumb';
+import React, { useState, useEffect } from 'react';
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,17 +17,19 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const EllipsesMenu = () => {
+import DeleteModal from '@/components/Modals/DeleteModal';
+
+const EllipsesMenu = ({ playlistId, refetch }) => {
     return (
         <DropdownMenu className='max-w-1/4'>
             <DropdownMenuTrigger>
                 <BreadcrumbEllipsis className='h-6 w-6' />
                 <span className='sr-only'>Toggle Menu</span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className=''>
+            <DropdownMenuContent>
                 <DropdownMenuItem>Edit Details</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Delete</DropdownMenuItem>
+                <DeleteModal playlistId={playlistId} refetch={refetch} />
             </DropdownMenuContent>
         </DropdownMenu>
     );

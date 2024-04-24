@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 
-const CreatePlaylist = () => {
+const CreatePlaylist = ({ refetch }) => {
     const { data: session } = useSession();
     const [formData, setFormData] = useState({
         name: '',
@@ -39,9 +39,7 @@ const CreatePlaylist = () => {
             }
         )
             .then((res) => res.json())
-            .then((playlist) => {
-                console.log('[createPlaylist] playlist --> ', playlist);
-            })
+            .then((playlist) => refetch(session.user.accessToken))
             .catch((err) => console.error('[createPlaylist] err --> ', err));
     };
 
