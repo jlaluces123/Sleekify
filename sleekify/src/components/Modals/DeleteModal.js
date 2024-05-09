@@ -11,6 +11,8 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 
+import { Trash } from 'lucide-react';
+
 const DeleteModal = ({ playlistId, refetch }) => {
     const { data: session } = useSession();
 
@@ -33,9 +35,7 @@ const DeleteModal = ({ playlistId, refetch }) => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <button className='text-red-500 relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none'>
-                    Delete
-                </button>
+                <Trash className='h-10 w-10 p-2 rounded-full cursor-pointer hover:bg-gray-100' />
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>

@@ -4,8 +4,7 @@ import { redirect } from 'next/navigation';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import CreatePlaylist from './CreatePlaylist';
-
-import EllipsesMenu from '@/components/DropDown/DropDown';
+import DeleteModal from '../Modals/DeleteModal';
 
 const PlaylistList = () => {
     const { data: session, status } = useSession();
@@ -23,25 +22,23 @@ const PlaylistList = () => {
         )
             .then((res) => res.json())
             .then((filterPlaylists) => {
-                console.log(filterPlaylists);
                 return filterPlaylists.items.filter(
                     (playlist) =>
                         playlist.owner.display_name === session.user.name
                 );
             });
-
         setMyPlaylists(playlists);
         return playlists;
     };
 
     useEffect(() => {
-        console.log('[PlaylistList] myPlaylists updated');
+        console.log('[myPlaylists useEffect] UPDATED --> ', myPlaylists);
     }, [myPlaylists]);
 
     useEffect(() => {
         getMyPlaylists(session.user.accessToken)
             .then((playlists) => {
-                console.log('[getMyPlaylists] res --> ', playlists);
+                // console.log('[getMyPlaylists] res --> ', playlists);
             })
             .catch((err) => {
                 console.error('[getMyPlaylists] err --> ', err);
@@ -86,7 +83,8 @@ const PlaylistList = () => {
                                 >
                                     {playlist.name}
                                 </a>
-                                <EllipsesMenu
+                                <DeleteModal
+                                    playlistDetails={playlist}
                                     playlistId={playlist.id}
                                     refetch={getMyPlaylists}
                                 />
