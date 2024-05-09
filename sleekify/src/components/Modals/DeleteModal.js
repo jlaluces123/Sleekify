@@ -37,7 +37,7 @@ const DeleteModal = ({ playlistId, refetch }) => {
             <DialogTrigger asChild>
                 <Trash className='h-10 w-10 p-2 rounded-full cursor-pointer hover:bg-gray-100' />
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className='w-11/12'>
                 <DialogHeader>
                     <DialogTitle className='text-red-400'>
                         Are you sure?
@@ -53,7 +53,7 @@ const DeleteModal = ({ playlistId, refetch }) => {
                 </p>
                 <hr />
                 <DialogFooter>
-                    <div className='flex justify-between items-center'>
+                    <div className='w-full flex justify-between items-center'>
                         <DialogClose asChild>
                             <button className='text-gray-700 text-sm border-black border rounded py-2 px-4'>
                                 Cancel
@@ -64,7 +64,7 @@ const DeleteModal = ({ playlistId, refetch }) => {
                                 className='text-red-50 text-sm bg-red-500 rounded py-2 px-4'
                                 onClick={deletePlaylist}
                             >
-                                I understand, remove this playlist
+                                Delete Playlist
                             </button>
                         </DialogClose>
                     </div>
