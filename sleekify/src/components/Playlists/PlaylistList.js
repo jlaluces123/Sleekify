@@ -52,7 +52,7 @@ const PlaylistList = () => {
             <CreatePlaylist refetch={getMyPlaylists} />
             {!!myPlaylists && myPlaylists.length ? (
                 <div className='max-w-full'>
-                    <div className='bg-gray-100 py-2'>
+                    <div className='bg-gray-100 py-2 cursor-pointer hover:bg-gray-300'>
                         <a
                             className='text-2xl font-semibold hover:underline hover:cursor-pointer'
                             onClick={() =>
@@ -66,15 +66,20 @@ const PlaylistList = () => {
                         return (
                             <div
                                 className={
-                                    'flex justify-between items-center flex-row py-2' +
+                                    'flex justify-between items-center flex-row py-2 cursor-pointer hover:bg-gray-300' +
                                     ((index + 1) % 2 === 0
                                         ? ' bg-gray-100'
                                         : '')
                                 }
+                                onClick={() =>
+                                    router.push(
+                                        `/playlist-builder/${playlist.id}`
+                                    )
+                                }
                                 key={playlist.id}
                             >
                                 <a
-                                    className='hover:underline text-2xl font-semibold hover:cursor-pointer truncate overflow-ellipsis max-w-3/4'
+                                    className='hover:underline text-2xl font-semibold cursor-pointer truncate overflow-ellipsis max-w-3/4'
                                     onClick={() =>
                                         router.push(
                                             `/playlist-builder/${playlist.id}`
