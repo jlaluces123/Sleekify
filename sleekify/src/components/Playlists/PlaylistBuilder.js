@@ -162,9 +162,12 @@ const PlaylistBuilder = () => {
 
     return (
         <div>
-            <div className='flex flex-row justify-between'>
-                <h3 className='mb-4 font-bold text-2xl'>Your Playlist</h3>
-                <button onClick={() => setHidden(!hidden)}>
+            <div className='flex flex-row justify-between items-center mb-4'>
+                <h3 className='font-bold text-2xl'>Your Playlist</h3>
+                <button
+                    className='uppercase text-gray-500 text-base'
+                    onClick={() => setHidden(!hidden)}
+                >
                     {hidden ? 'expand' : 'hide'}
                 </button>
             </div>
