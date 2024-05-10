@@ -48,7 +48,7 @@ const PlaylistList = () => {
 
     return (
         <div className='w-full'>
-            <h1 className='text-4xl font-bold mb-8'>Playlist Builder</h1>
+            <h1 className='text-4xl font-bold mb-4'>Your Playlists</h1>
             <CreatePlaylist refetch={getMyPlaylists} />
             {!!myPlaylists && myPlaylists.length ? (
                 <div className='max-w-full'>
