@@ -23,7 +23,10 @@ const AuthNav = () => {
                     </button>
                 </div>
             ) : (
-                <button className='cta-btn mr-4' onClick={() => signIn()}>
+                <button
+                    className='cta-btn mr-4'
+                    onClick={() => signIn('spotify')}
+                >
                     Sign In
                 </button>
             )}

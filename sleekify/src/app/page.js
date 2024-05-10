@@ -18,9 +18,19 @@ export default function Home() {
     }
 
     return (
-        <>
-            <h1>Not Signed In</h1>
-            <button onClick={() => signIn()}>Sign In</button>
-        </>
+        <div className='flex flex-col justify-center items-center h-screen bg-cover bg-center p-4'>
+            <h1 className='text-4xl font-bold mb-4 text-center'>Sleekify</h1>
+            <p className='text-xl mb-6 text-center max-w-md'>
+                Create, edit, and manage playlists easier than ever before.
+                Experience playlist management as it should be — sleek and
+                simple.
+            </p>
+            <button
+                onClick={() => signIn('spotify')}
+                className='cta-btn text-white bg-green-500 hover:bg-green-600 py-2 px-4 rounded-md'
+            >
+                Sign In
+            </button>
+        </div>
     );
 }
