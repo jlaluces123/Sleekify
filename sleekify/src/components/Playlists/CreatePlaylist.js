@@ -74,7 +74,7 @@ const CreatePlaylist = ({ refetch }) => {
                         <h1>Create Playlist</h1>
                     </button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className='w-11/12'>
                     <DialogHeader>Create a Playlist</DialogHeader>
                     <DialogDescription>
                         Ready to groove? Quickly craft your perfect playlist
