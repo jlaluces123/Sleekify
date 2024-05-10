@@ -210,20 +210,13 @@ const PlaylistBuilder = () => {
                 Tap to add songs to your playlists!
             </p>
             {/* TODO: look into Layouts after */}
-            <form
-                onSubmit={(e) =>
-                    searchSongs(e, session.user.accessToken, searchTerm)
-                }
-                className='flex flex-row justify-between my-2'
-            >
-                <input
-                    type='text'
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    value={searchTerm}
-                    className='w-full p-4 border border-gray-300 rounded-lg'
-                    placeholder='Search for songs to add...'
-                />
-            </form>
+            <input
+                type='text'
+                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchTerm}
+                className='w-full p-4 border border-gray-300 rounded-lg'
+                placeholder='Search for songs to add...'
+            />
             {!!searchedSongs && searchedSongs.length ? (
                 <div className='song-list'>
                     {searchedSongs.map((song) => {
