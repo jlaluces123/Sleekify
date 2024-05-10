@@ -52,24 +52,12 @@ const PlaylistList = () => {
             <CreatePlaylist refetch={getMyPlaylists} />
             {!!myPlaylists && myPlaylists.length ? (
                 <div className='max-w-full'>
-                    <div className='bg-gray-100 py-2 cursor-pointer hover:bg-gray-300'>
-                        <a
-                            className='text-2xl font-semibold hover:underline hover:cursor-pointer'
-                            onClick={() =>
-                                router.push(`/playlist-builder/liked-songs`)
-                            }
-                        >
-                            Liked Songs
-                        </a>
-                    </div>
                     {myPlaylists.map((playlist, index) => {
                         return (
                             <div
                                 className={
                                     'flex justify-between items-center flex-row py-2 cursor-pointer hover:bg-gray-300' +
-                                    ((index + 1) % 2 === 0
-                                        ? ' bg-gray-100'
-                                        : '')
+                                    (index % 2 === 0 ? ' bg-gray-100' : '')
                                 }
                                 onClick={() =>
                                     router.push(
@@ -80,7 +68,7 @@ const PlaylistList = () => {
                             >
                                 <a
                                     className='hover:underline text-2xl font-semibold cursor-pointer truncate overflow-ellipsis max-w-3/4'
-                                    onClick={() =>
+                                    onClick={(e) =>
                                         router.push(
                                             `/playlist-builder/${playlist.id}`
                                         )
@@ -88,11 +76,13 @@ const PlaylistList = () => {
                                 >
                                     {playlist.name}
                                 </a>
-                                <DeleteModal
-                                    playlistDetails={playlist}
-                                    playlistId={playlist.id}
-                                    refetch={getMyPlaylists}
-                                />
+                                <div onClick={(e) => e.stopPropagation()}>
+                                    <DeleteModal
+                                        playlistDetails={playlist}
+                                        playlistId={playlist.id}
+                                        refetch={getMyPlaylists}
+                                    />
+                                </div>
                             </div>
                         );
                     })}
