@@ -39,7 +39,7 @@ const Navigation = () => {
             <div className='left'>
                 <div className='logo'>
                     <h1
-                        className='font-bold text-4xl hover:cursor-pointer'
+                        className='font-bold text-4xl hover:cursor-pointer underline underline-offset-1'
                         onClick={() => router.push('/')}
                     >
                         Sleekify
