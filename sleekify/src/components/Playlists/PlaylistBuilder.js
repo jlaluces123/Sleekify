@@ -2,6 +2,8 @@
 import { useSession, getSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { useParams, redirect } from 'next/navigation';
+import { Trash } from 'lucide-react';
+import useDebounce from '@/lib/useDebounce';
 
 async function getPlaylistItems(accessToken, playlist_id) {
     const playlists = await fetch(
@@ -35,6 +37,7 @@ const PlaylistBuilder = () => {
     const [hidden, setHidden] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchedSongs, setSearchedSongs] = useState(null);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
     useEffect(() => {
         console.log('[PlaylistBuilder] session --> ', session);
@@ -49,13 +52,14 @@ const PlaylistBuilder = () => {
             });
     }, [session]);
 
-    const handleSearch = (songName) => {
-        console.log('[handleSearch] songName --> ', songName);
-        setSearchTerm(songName);
-    };
+    useEffect(() => {
+        if (debouncedSearchTerm) {
+            searchSongs(session.user.accessToken, debouncedSearchTerm);
+        }
+    }, [debouncedSearchTerm]);
 
-    const searchSongs = async (e, accessToken, songName) => {
-        e.preventDefault();
+    const searchSongs = async (accessToken, songName) => {
+        // e.preventDefault();
         if (!songName || songName === '') return;
         const parsedSongName = await parseSong(songName);
         const songs = await fetch(
@@ -140,7 +144,7 @@ const PlaylistBuilder = () => {
     return (
         <div>
             <div className='flex flex-row justify-between'>
-                <h3 className='mb-2 font-bold text-2xl'>Your Playlist</h3>
+                <h3 className='mb-4 font-bold text-2xl'>Your Playlist</h3>
                 <button onClick={() => setHidden(!hidden)}>
                     {hidden ? 'expand' : 'hide'}
                 </button>
@@ -149,30 +153,28 @@ const PlaylistBuilder = () => {
                 <div></div>
             ) : !!playlistSongs && playlistSongs.length ? (
                 <div>
-                    {playlistSongs.map((song) => {
+                    {playlistSongs.map((song, index) => {
                         return (
-                            <div
-                                className='flex flex-row justify-between my-4'
-                                key={song.track.id}
-                            >
-                                <div className='song-name cursor-pointer w-full my-2 hover:bg-gray-200'>
-                                    {song.track.name || song.track.album.name}{' '}
-                                    by{' '}
-                                    {song.track.artists.map((artist) => {
-                                        return artist.name + ', ';
-                                    })}
-                                </div>
-                                <div className='right-song'>
-                                    <button
+                            <div className='' key={song.track.id}>
+                                <div
+                                    className={
+                                        'song-name cursor-pointer w-full py-4 hover:bg-gray-300 justify-between items-center flex flex-row' +
+                                        (index % 2 === 0 ? ' bg-gray-100' : '')
+                                    }
+                                >
+                                    <p className='hover:underline text-2xl font-medium cursor-pointer truncate overflow-ellipsis max-w-3/4'>
+                                        {song.track.name ||
+                                            song.track.album.name}
+                                    </p>
+                                    <Trash
+                                        className='h-10 w-10 p-2 rounded-full cursor-pointer hover:bg-gray-100'
                                         onClick={() =>
                                             deleteSongFromPlaylist(
                                                 params.playlist_id,
                                                 song
                                             )
                                         }
-                                    >
-                                        Delete
-                                    </button>
+                                    ></Trash>
                                 </div>
                             </div>
                         );
@@ -191,11 +193,11 @@ const PlaylistBuilder = () => {
             >
                 <input
                     type='text'
-                    onChange={(e) => handleSearch(e.target.value)}
-                    className='w-full'
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    value={searchTerm}
+                    className='w-full p-4 border border-gray-300 rounded-lg'
                     placeholder='Search for songs to add...'
                 />
-                <input type='submit' />
             </form>
             {!!searchedSongs && searchedSongs.length ? (
                 <div className='song-list'>
