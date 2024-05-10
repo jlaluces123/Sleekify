@@ -5,21 +5,6 @@ import { useParams, redirect } from 'next/navigation';
 import { Trash } from 'lucide-react';
 import useDebounce from '@/lib/useDebounce';
 
-async function getPlaylistItems(accessToken, playlist_id) {
-    const playlists = await fetch(
-        `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        }
-    )
-        .then((res) => res.json())
-        .catch((err) => console.error('[getPlaylistItems] err --> ', err));
-
-    return playlists.items;
-}
-
 async function parseSong(songName) {
     let song = songName;
 
@@ -38,6 +23,7 @@ const PlaylistBuilder = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchedSongs, setSearchedSongs] = useState(null);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    let playlistIdMap = {};
 
     useEffect(() => {
         console.log('[PlaylistBuilder] session --> ', session);
@@ -53,10 +39,36 @@ const PlaylistBuilder = () => {
     }, [session]);
 
     useEffect(() => {
+        playlistSongs &&
+            playlistSongs.map((song) => {
+                if (!playlistIdMap[song.track.id]) {
+                    playlistIdMap[song.track.id] = song;
+                }
+            });
+
+        console.log('playlistIdMap --> ', playlistIdMap);
+    }, [playlistSongs]);
+
+    useEffect(() => {
         if (debouncedSearchTerm) {
             searchSongs(session.user.accessToken, debouncedSearchTerm);
         }
     }, [debouncedSearchTerm]);
+
+    const getPlaylistItems = async (accessToken, playlist_id) => {
+        const playlists = await fetch(
+            `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        )
+            .then((res) => res.json())
+            .catch((err) => console.error('[getPlaylistItems] err --> ', err));
+
+        return playlists.items;
+    };
 
     const searchSongs = async (accessToken, songName) => {
         // e.preventDefault();
@@ -85,6 +97,13 @@ const PlaylistBuilder = () => {
 
     const addSongToPlaylist = async (playlist_id, song) => {
         console.log(`adding '${song.name || song.album.name}' to playlist`);
+        console.log(`checking ${song.id} in playlistIdMap --> `, playlistIdMap);
+
+        if (playlistIdMap[song.id]) {
+            console.log('song already exists in playlist');
+            return;
+        }
+
         const postSong = await fetch(
             `https://api.spotify.com/v1/playlists/${playlist_id}/tracks`,
             {
@@ -183,7 +202,10 @@ const PlaylistBuilder = () => {
             ) : (
                 <div>No songs added yet!</div>
             )}
-            <h3 className='mt-6 mb-4 font-bold text-2xl'>Add New Songs</h3>
+            <h3 className='mt-6 font-bold text-2xl'>Add New Songs</h3>
+            <p className='text-gray-500 font-light'>
+                Tap to add songs to your playlists!
+            </p>
             {/* TODO: look into Layouts after */}
             <form
                 onSubmit={(e) =>
@@ -218,7 +240,7 @@ const PlaylistBuilder = () => {
                                 >
                                     {song.album.images ? (
                                         <img
-                                            className='w-10 h-10'
+                                            className='w-14 h-14 rounded-sm mr-2'
                                             src={
                                                 song.album.images[
                                                     song.album.images.length - 1
@@ -228,10 +250,9 @@ const PlaylistBuilder = () => {
                                     ) : (
                                         ''
                                     )}
-                                    {song.name || song.album.name} by{' '}
-                                    {song.artists.map((artist) => {
-                                        return artist.name + ', ';
-                                    })}
+                                    <p className='hover:underline text-xl font-medium cursor-pointer truncate overflow-ellipsis max-w-3/4'>
+                                        {song.name || song.album.name}
+                                    </p>
                                 </div>
                             </div>
                         );
